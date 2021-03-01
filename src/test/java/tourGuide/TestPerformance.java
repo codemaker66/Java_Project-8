@@ -8,6 +8,8 @@ import java.util.List;
 import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 
 import org.apache.commons.lang3.time.StopWatch;
@@ -25,6 +27,8 @@ import tourGuide.user.User;
 
 public class TestPerformance {
 	
+	private ExecutorService executorService = Executors.newFixedThreadPool(700);
+
 	/*
 	 * A note on performance improvements:
 	 *     
@@ -61,14 +65,9 @@ public class TestPerformance {
 		
 	    StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
-		for(User user : allUsers) {
-			completableFutureList.add(CompletableFuture.runAsync(new Runnable() {
-			    @Override
-			    public void run() {
-			        tourGuideService.trackUserLocation(user);
-			    }
-			}));
-		}
+		 allUsers.forEach(u -> completableFutureList.add(CompletableFuture.runAsync(() -> {
+			 tourGuideService.trackUserLocation(u);
+	    }, executorService)));
 		CompletableFuture<Void> results = CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[completableFutureList.size()]));
 		results.get();
 		stopWatch.stop();
@@ -78,25 +77,27 @@ public class TestPerformance {
 		assertTrue(TimeUnit.MINUTES.toSeconds(15) >= TimeUnit.MILLISECONDS.toSeconds(stopWatch.getTime()));
 	}
 	
-	@Ignore
 	@Test
-	public void highVolumeGetRewards() {
+	public void highVolumeGetRewards() throws InterruptedException, ExecutionException {
 		GpsUtil gpsUtil = new GpsUtil();
 		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
 
 		// Users should be incremented up to 100,000, and test finishes within 20 minutes
-		InternalTestHelper.setInternalUserNumber(100);
+		InternalTestHelper.setInternalUserNumber(100000);
 		StopWatch stopWatch = new StopWatch();
 		stopWatch.start();
 		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
-		
+		List<CompletableFuture<Void>> completableFutureList = new ArrayList<>();
 	    Attraction attraction = gpsUtil.getAttractions().get(0);
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
 		allUsers.forEach(u -> u.addToVisitedLocations(new VisitedLocation(u.getUserId(), attraction, new Date())));
 	     
-	    allUsers.forEach(u -> rewardsService.calculateRewards(u));
-	    
+	    allUsers.forEach(u -> completableFutureList.add(CompletableFuture.runAsync(() -> {
+	    		rewardsService.calculateRewards(u);
+	    }, executorService)));
+	    CompletableFuture<Void> results = CompletableFuture.allOf(completableFutureList.toArray(new CompletableFuture[completableFutureList.size()]));
+		results.get();
 		for(User user : allUsers) {
 			assertTrue(user.getUserRewards().size() > 0);
 		}

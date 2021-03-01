@@ -1,5 +1,6 @@
 package tourGuide.service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.stereotype.Service;
@@ -37,8 +38,10 @@ public class RewardsService {
 	}
 	
 	public void calculateRewards(User user) {
-		List<VisitedLocation> userLocations = user.getVisitedLocations();
-		List<Attraction> attractions = gpsUtil.getAttractions();
+		List<VisitedLocation> userLocations = new ArrayList<>();
+		userLocations.addAll(user.getVisitedLocations());
+		List<Attraction> attractions = new ArrayList<>(); 
+		attractions.addAll(gpsUtil.getAttractions());
 		
 		for(VisitedLocation visitedLocation : userLocations) {
 			for(Attraction attraction : attractions) {
