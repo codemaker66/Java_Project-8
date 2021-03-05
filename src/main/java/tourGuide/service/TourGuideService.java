@@ -3,6 +3,8 @@ package tourGuide.service;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
 import java.util.ArrayList;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -20,8 +22,10 @@ import gpsUtil.GpsUtil;
 import gpsUtil.location.Attraction;
 import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
+import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
 import tourGuide.tracker.Tracker;
+import tourGuide.user.Output;
 import tourGuide.user.User;
 import tourGuide.user.UserReward;
 import tripPricer.Provider;
@@ -35,6 +39,7 @@ public class TourGuideService {
 	private final TripPricer tripPricer = new TripPricer();
 	public final Tracker tracker;
 	boolean testMode = true;
+	RewardCentral rewardsCentral = new RewardCentral();
 	
 	public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
@@ -89,15 +94,28 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
-	public List<Attraction> getNearByAttractions(VisitedLocation visitedLocation) {
-		List<Attraction> nearbyAttractions = new ArrayList<>();
+	public List<Output> getNearByAttractions(VisitedLocation visitedLocation, User user) {
+		List<Output> attractionList = new ArrayList<>();
+		List<Output> nearByAttractions = new ArrayList<>();
+		
 		for(Attraction attraction : gpsUtil.getAttractions()) {
-			if(rewardsService.isWithinAttractionProximity(attraction, visitedLocation.location)) {
-				nearbyAttractions.add(attraction);
-			}
+			Output output = new Output();
+			output.setAttractionName(attraction.attractionName);
+			Location location = new Location(attraction.latitude, attraction.longitude);
+			output.setAttractionLocation(location);
+			output.setUserLocation(user.getLastVisitedLocation().location);
+			output.setDistance(rewardsService.getDistance(attraction, visitedLocation.location));
+			output.setAttractionRewardPoints(rewardsCentral.getAttractionRewardPoints(attraction.attractionId, user.getUserId()));
+			attractionList.add(output);
 		}
 		
-		return nearbyAttractions;
+		Collections.sort(attractionList, Comparator.comparingDouble(Output::getDistance));
+		
+		for (int i = 0; i < 5; i++) {
+			nearByAttractions.add(attractionList.get(i));
+		}
+		
+		return nearByAttractions;
 	}
 	
 	private void addShutDownHook() {
