@@ -3,13 +3,16 @@ package tourGuide;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
+import java.util.HashMap;
 import java.util.List;
 import java.util.Locale;
+import java.util.Map;
 import java.util.UUID;
 
 import org.junit.Test;
 
 import gpsUtil.GpsUtil;
+import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import rewardCentral.RewardCentral;
 import tourGuide.helper.InternalTestHelper;
@@ -94,7 +97,6 @@ public class TestTourGuideService {
 		assertEquals(user.getUserId(), visitedLocation.userId);
 	}
 	
-
 	@Test
 	public void getNearbyAttractions() {
 		Locale.setDefault(new Locale("en", "US", "WIN"));
@@ -113,6 +115,7 @@ public class TestTourGuideService {
 		assertEquals(5, attractions.size());
 	}
 	
+	@Test
 	public void getTripDeals() {
 		GpsUtil gpsUtil = new GpsUtil();
 		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
@@ -125,8 +128,35 @@ public class TestTourGuideService {
 		
 		tourGuideService.tracker.stopTracking();
 		
-		assertEquals(10, providers.size());
+		assertEquals(5, providers.size());
 	}
 	
+	@Test
+	public void getAllCurrentLocations() {
+		GpsUtil gpsUtil = new GpsUtil();
+		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		InternalTestHelper.setInternalUserNumber(0);
+		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
+		
+		tourGuideService.addUser(user);
+		tourGuideService.addUser(user2);
+		
+		tourGuideService.trackUserLocation(user);
+		tourGuideService.trackUserLocation(user2);
+		
+		Map<String, Location> map = new HashMap<>();
+		
+		map.put(user.getUserId().toString(), user.getLastVisitedLocation().location);
+		map.put(user2.getUserId().toString(), user2.getLastVisitedLocation().location);
+		
+		Map<String, Location> results = tourGuideService.getAllCurrentLocations();
+		
+		tourGuideService.tracker.stopTracking();
+		
+		assertEquals(results, map);
+	}
 	
 }

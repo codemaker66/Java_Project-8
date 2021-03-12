@@ -118,6 +118,17 @@ public class TourGuideService {
 		return nearByAttractions;
 	}
 	
+	public Map<String, Location> getAllCurrentLocations() {
+		Map<String, Location> map = new HashMap<>();
+		List<User> users = getAllUsers();
+		
+		for (int i = 0; i < users.size(); i++) {
+			map.put(users.get(i).getUserId().toString(), users.get(i).getLastVisitedLocation().location);
+		}
+		
+		return map;
+	}
+	
 	private void addShutDownHook() {
 		Runtime.getRuntime().addShutdownHook(new Thread() { 
 		      public void run() {

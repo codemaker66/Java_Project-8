@@ -1,8 +1,6 @@
 package tourGuide;
 
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -11,7 +9,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.jsoniter.output.JsonStream;
 
-import gpsUtil.location.Location;
 import gpsUtil.location.VisitedLocation;
 import tourGuide.service.TourGuideService;
 import tourGuide.user.User;
@@ -48,13 +45,7 @@ public class TourGuideController {
 
 	@RequestMapping("/getAllCurrentLocations")
 	public String getAllCurrentLocations() {
-		Map<String, Location> map = new HashMap<>();
-		List<User> user = tourGuideService.getAllUsers();
-		for (int i = 0; i < user.size(); i++) {
-			map.put(user.get(i).getUserId().toString(), user.get(i).getLastVisitedLocation().location);
-		}
-
-		return JsonStream.serialize(map);
+		return JsonStream.serialize(tourGuideService.getAllCurrentLocations());
 	}
 
 	@RequestMapping("/getTripDeals")
