@@ -27,6 +27,7 @@ import tourGuide.helper.InternalTestHelper;
 import tourGuide.tracker.Tracker;
 import tourGuide.user.Output;
 import tourGuide.user.User;
+import tourGuide.user.UserPreferences;
 import tourGuide.user.UserReward;
 import tripPricer.Provider;
 import tripPricer.TripPricer;
@@ -39,7 +40,7 @@ public class TourGuideService {
 	private final TripPricer tripPricer = new TripPricer();
 	public final Tracker tracker;
 	boolean testMode = true;
-	RewardCentral rewardsCentral = new RewardCentral();
+	private RewardCentral rewardsCentral = new RewardCentral();
 	
 	public TourGuideService(GpsUtil gpsUtil, RewardsService rewardsService) {
 		this.gpsUtil = gpsUtil;
@@ -127,6 +128,15 @@ public class TourGuideService {
 		}
 		
 		return map;
+	}
+	
+	public void editPreferences(User user, UserPreferences preferences) {
+		UserPreferences userPreferences = new UserPreferences();
+		userPreferences.setTripDuration(preferences.getTripDuration());
+		userPreferences.setTicketQuantity(preferences.getTicketQuantity());
+		userPreferences.setNumberOfAdults(preferences.getNumberOfAdults());
+		userPreferences.setNumberOfChildren(preferences.getNumberOfChildren());
+		user.setUserPreferences(userPreferences);
 	}
 	
 	private void addShutDownHook() {

@@ -2,6 +2,7 @@ package tourGuide;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.assertNotEquals;
 
 import java.util.HashMap;
 import java.util.List;
@@ -20,6 +21,7 @@ import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
 import tourGuide.user.Output;
 import tourGuide.user.User;
+import tourGuide.user.UserPreferences;
 import tripPricer.Provider;
 
 public class TestTourGuideService {
@@ -157,6 +159,29 @@ public class TestTourGuideService {
 		tourGuideService.tracker.stopTracking();
 		
 		assertEquals(results, map);
+	}
+	
+	@Test
+	public void editPreferences() {
+		GpsUtil gpsUtil = new GpsUtil();
+		RewardsService rewardsService = new RewardsService(gpsUtil, new RewardCentral());
+		InternalTestHelper.setInternalUserNumber(0);
+		TourGuideService tourGuideService = new TourGuideService(gpsUtil, rewardsService);
+		
+		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
+		
+		UserPreferences oldPreferences = user.getUserPreferences();
+		UserPreferences userPreferences = new UserPreferences();
+		userPreferences.setTripDuration(10);
+		userPreferences.setTicketQuantity(4);
+		userPreferences.setNumberOfAdults(2);
+		userPreferences.setNumberOfChildren(2);
+		user.setUserPreferences(userPreferences);
+		UserPreferences newPreferences = user.getUserPreferences();
+		
+		tourGuideService.tracker.stopTracking();
+		
+		assertNotEquals(oldPreferences, newPreferences);
 	}
 	
 }
