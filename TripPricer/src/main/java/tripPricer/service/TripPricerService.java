@@ -18,7 +18,7 @@ public class TripPricerService {
 
 	public List<Provider> getPrice(Map<String, String> map) {
 		return tripPricer.getPrice(map.get("tripPricerApiKey"), UUID.fromString(map.get("userId")),
-				Integer.parseInt(map.get("numberOfAdults")), Integer.parseInt(map.get("getNumberOfChildren")),
+				Integer.parseInt(map.get("numberOfAdults")), Integer.parseInt(map.get("numberOfChildren")),
 				Integer.parseInt(map.get("tripDuration")), Integer.parseInt(map.get("cumulatativeRewardPoints")));
 	}
 

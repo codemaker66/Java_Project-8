@@ -1,4 +1,4 @@
-package tourGuide.user;
+package tourGuide.model;
 
 public class UserReward {
 

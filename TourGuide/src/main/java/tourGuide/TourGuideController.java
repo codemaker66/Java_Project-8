@@ -1,7 +1,7 @@
 package tourGuide;
 
 import java.util.List;
-
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -9,13 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.jsoniter.output.JsonStream;
-
+import tourGuide.model.Location;
+import tourGuide.model.Output;
+import tourGuide.model.Preferences;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
 import tourGuide.service.TourGuideService;
-import tourGuide.user.Provider;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tourGuide.user.VisitedLocation;
 
 @RestController
 public class TourGuideController {
@@ -29,43 +30,37 @@ public class TourGuideController {
 	}
 
 	@RequestMapping("/getLocation")
-	public String getLocation(@RequestParam String userName) {
-		VisitedLocation visitedLocation = tourGuideService.getUserLocation(getUser(userName));
-		return JsonStream.serialize(visitedLocation.location);
+	public Location getLocation(@RequestParam String userName) {
+		VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
+		return visitedLocation.location;
 	}
 
 	@RequestMapping("/getNearbyAttractions")
-	public String getNearbyAttractions(@RequestParam String userName) {
-		User user = getUser(userName);
+	public List<Output> getNearbyAttractions(@RequestParam String userName) {
+		User user = tourGuideService.getUser(userName);
 		VisitedLocation visitedLocation = tourGuideService.getUserLocation(user);
-		return JsonStream.serialize(tourGuideService.getNearByAttractions(visitedLocation, user));
+		return tourGuideService.getNearByAttractions(visitedLocation, user);
 	}
 
 	@RequestMapping("/getRewards")
-	public String getRewards(@RequestParam String userName) {
-		return JsonStream.serialize(tourGuideService.getUserRewards(getUser(userName)));
+	public List<UserReward> getRewards(@RequestParam String userName) {
+		return tourGuideService.getUserRewards(tourGuideService.getUser(userName));
 	}
 
 	@RequestMapping("/getAllCurrentLocations")
-	public String getAllCurrentLocations() {
-		return JsonStream.serialize(tourGuideService.getAllCurrentLocations());
+	public Map<String, Location> getAllCurrentLocations() {
+		return tourGuideService.getAllCurrentLocations();
 	}
 
 	@RequestMapping("/getTripDeals")
-	public String getTripDeals(@RequestParam String userName) {
-		List<Provider> providers = tourGuideService.getTripDeals(getUser(userName));
-		return JsonStream.serialize(providers);
+	public List<Provider> getTripDeals(@RequestParam String userName) {
+		return tourGuideService.getTripDeals(tourGuideService.getUser(userName));
 	}
 
 	@PostMapping(value = "/editPreferences")
-	public String editPreferences(@RequestParam String userName, @RequestBody UserPreferences preferences) {
-		tourGuideService.editPreferences(getUser(userName), preferences);
-		return JsonStream.serialize("Preferences saved with success");
-
-	}
-
-	private User getUser(String userName) {
-		return tourGuideService.getUser(userName);
+	public String editPreferences(@RequestParam String userName, @RequestBody Preferences preferences) {
+		tourGuideService.editPreferences(tourGuideService.getUser(userName), preferences);
+		return "Preferences saved with success";
 	}
 
 }

@@ -13,6 +13,11 @@ import java.util.Random;
 import java.util.UUID;
 import java.util.stream.Collectors;
 import java.util.stream.IntStream;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+
+import org.javamoney.moneta.Money;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.core.ParameterizedTypeReference;
@@ -22,15 +27,16 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Attraction;
+import tourGuide.model.Location;
+import tourGuide.model.Output;
+import tourGuide.model.Preferences;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
+import tourGuide.model.UserPreferences;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
 import tourGuide.tracker.Tracker;
-import tourGuide.user.Attraction;
-import tourGuide.user.Location;
-import tourGuide.user.Output;
-import tourGuide.user.Provider;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tourGuide.user.UserReward;
-import tourGuide.user.VisitedLocation;
 
 @Service
 public class TourGuideService {
@@ -84,11 +90,11 @@ public class TourGuideService {
 		map.put("tripPricerApiKey", tripPricerApiKey);
 		map.put("userId", user.getUserId().toString());
 		map.put("numberOfAdults", String.valueOf(user.getUserPreferences().getNumberOfAdults()));
-		map.put("getNumberOfChildren", String.valueOf(user.getUserPreferences().getNumberOfChildren()));
+		map.put("numberOfChildren", String.valueOf(user.getUserPreferences().getNumberOfChildren()));
 		map.put("tripDuration", String.valueOf(user.getUserPreferences().getTripDuration()));
 		map.put("cumulatativeRewardPoints", String.valueOf(cumulatativeRewardPoints));
 		HttpEntity<Map<String, String>> entity = new HttpEntity<Map<String, String>>(map, null);
-		ResponseEntity<List<Provider>> response = restTemplate.exchange(URL, HttpMethod.POST, entity, new ParameterizedTypeReference<List<Provider>>() {});
+		ResponseEntity<List<Provider>> response = restTemplate.exchange(URL, HttpMethod.POST, entity, new ParameterizedTypeReference<List<Provider>>(){});
 		List<Provider> providers = response.getBody();
 		user.setTripDeals(providers);
 		return providers;
@@ -106,6 +112,7 @@ public class TourGuideService {
 	public List<Output> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 		List<Output> attractionList = new ArrayList<>();
 		List<Output> nearByAttractions = new ArrayList<>();
+		
 		for (Attraction attraction : rewardsService.getAttractions()) {
 			Output output = new Output();
 			output.setAttractionName(attraction.attractionName);
@@ -137,8 +144,13 @@ public class TourGuideService {
 		return map;
 	}
 
-	public void editPreferences(User user, UserPreferences preferences) {
+	public void editPreferences(User user, Preferences preferences) {
 		UserPreferences userPreferences = new UserPreferences();
+		userPreferences.setAttractionProximity(preferences.getAttractionProximity());
+		CurrencyUnit currency = Monetary.getCurrency(preferences.getCurrency());
+		userPreferences.setCurrency(currency);
+		userPreferences.setLowerPricePoint(Money.of(preferences.getLowerPricePoint(), currency));
+		userPreferences.setHighPricePoint(Money.of(preferences.getHighPricePoint(), currency));
 		userPreferences.setTripDuration(preferences.getTripDuration());
 		userPreferences.setTicketQuantity(preferences.getTicketQuantity());
 		userPreferences.setNumberOfAdults(preferences.getNumberOfAdults());

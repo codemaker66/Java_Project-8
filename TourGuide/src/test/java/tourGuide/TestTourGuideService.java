@@ -2,42 +2,43 @@ package tourGuide;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
-import static org.junit.Assert.assertNotEquals;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Locale;
 import java.util.Map;
 import java.util.UUID;
+
+import javax.money.CurrencyUnit;
+import javax.money.Monetary;
+
+import org.javamoney.moneta.Money;
 import org.junit.Test;
 import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Location;
+import tourGuide.model.Output;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
+import tourGuide.model.UserPreferences;
+import tourGuide.model.VisitedLocation;
 import tourGuide.service.RewardsService;
 import tourGuide.service.TourGuideService;
-import tourGuide.user.Location;
-import tourGuide.user.Output;
-import tourGuide.user.Provider;
-import tourGuide.user.User;
-import tourGuide.user.UserPreferences;
-import tourGuide.user.VisitedLocation;
 
 public class TestTourGuideService {
 
 	@Test
 	public void getUserLocation() {
-		Locale.setDefault(new Locale("en", "US", "WIN"));
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
+		
 		tourGuideService.tracker.stopTracking();
 		assertTrue(visitedLocation.userId.equals(user.getUserId()));
 	}
 
 	@Test
 	public void addUser() {
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -59,7 +60,6 @@ public class TestTourGuideService {
 
 	@Test
 	public void getAllUsers() {
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -80,8 +80,6 @@ public class TestTourGuideService {
 
 	@Test
 	public void trackUser() {
-		Locale.setDefault(new Locale("en", "US", "WIN"));
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -96,8 +94,6 @@ public class TestTourGuideService {
 
 	@Test
 	public void getNearbyAttractions() {
-		Locale.setDefault(new Locale("en", "US", "WIN"));
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -114,7 +110,6 @@ public class TestTourGuideService {
 
 	@Test
 	public void getTripDeals() {
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -130,7 +125,6 @@ public class TestTourGuideService {
 
 	@Test
 	public void getAllCurrentLocations() {
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
@@ -158,25 +152,29 @@ public class TestTourGuideService {
 
 	@Test
 	public void editPreferences() {
-
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
-		UserPreferences oldPreferences = user.getUserPreferences();
 		UserPreferences userPreferences = new UserPreferences();
+		userPreferences.setAttractionProximity(100);
+		CurrencyUnit currency = Monetary.getCurrency("EUR");
+		userPreferences.setCurrency(currency);
+		userPreferences.setLowerPricePoint(Money.of(20, currency));
+		userPreferences.setHighPricePoint(Money.of(80, currency));
 		userPreferences.setTripDuration(10);
 		userPreferences.setTicketQuantity(4);
 		userPreferences.setNumberOfAdults(2);
 		userPreferences.setNumberOfChildren(2);
 		user.setUserPreferences(userPreferences);
-		UserPreferences newPreferences = user.getUserPreferences();
 
 		tourGuideService.tracker.stopTracking();
 
-		assertNotEquals(oldPreferences, newPreferences);
+		assertEquals(userPreferences.getCurrency(), user.getUserPreferences().getCurrency());
+		assertEquals(userPreferences.getHighPricePoint(), user.getUserPreferences().getHighPricePoint());
+		assertEquals(userPreferences.getNumberOfAdults(), user.getUserPreferences().getNumberOfAdults());
 	}
 
 }

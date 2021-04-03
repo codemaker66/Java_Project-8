@@ -10,11 +10,12 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import tourGuide.user.Attraction;
-import tourGuide.user.Location;
-import tourGuide.user.User;
-import tourGuide.user.UserReward;
-import tourGuide.user.VisitedLocation;
+
+import tourGuide.model.Attraction;
+import tourGuide.model.Location;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
 
 @Service
 public class RewardsService {
@@ -83,7 +84,7 @@ public class RewardsService {
 
 	public List<Attraction> getAttractions() {
 		String URL = "http://localhost:" + 8081 + "/getAttractions";
-		ResponseEntity<List<Attraction>> response = restTemplate.exchange(URL, HttpMethod.GET, null,new ParameterizedTypeReference<List<Attraction>>() {});
+		ResponseEntity<List<Attraction>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Attraction>>(){});
 		return response.getBody();
 	}
 
