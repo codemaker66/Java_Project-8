@@ -28,6 +28,7 @@ public class TestPerformance {
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(100000);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 		
 		List<User> allUsers = new ArrayList<>();
 		allUsers = tourGuideService.getAllUsers();
@@ -54,6 +55,8 @@ public class TestPerformance {
 	@Test
 	public void highVolumeGetRewards() throws InterruptedException, ExecutionException {
 		RewardsService rewardsService = new RewardsService();
+		rewardsService.setAttractionRewardPointsUrl("http://localhost:8082/getAttractionRewardPoints");
+		rewardsService.setAttractionsUrl("http://localhost:8081/getAttractions");
 		InternalTestHelper.setInternalUserNumber(100000);
 		
 		StopWatch stopWatch = new StopWatch();

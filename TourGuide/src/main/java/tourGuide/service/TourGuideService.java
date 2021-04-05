@@ -46,6 +46,8 @@ public class TourGuideService {
 	public final Tracker tracker;
 	boolean testMode = true;
 	private RestTemplate restTemplate = new RestTemplate();
+	private String priceUrl = "http://trip-pricer-server:8083/getPrice";
+	private String userLocationUrl = "http://gps-util-server:8081/getUserLocation";
 
 	public TourGuideService(RewardsService rewardsService) {
 		this.rewardsService = rewardsService;
@@ -58,6 +60,14 @@ public class TourGuideService {
 		}
 		tracker = new Tracker(this);
 		addShutDownHook();
+	}
+	
+	public void setPriceUrl(String priceUrl) {
+		this.priceUrl = priceUrl;
+	}
+	
+	public void setUserLocationUrl(String userLocationUrl) {
+		this.userLocationUrl = userLocationUrl;
 	}
 
 	public List<UserReward> getUserRewards(User user) {
@@ -85,7 +95,7 @@ public class TourGuideService {
 
 	public List<Provider> getTripDeals(User user) {
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
-		String URL = "http://localhost:" + 8083 + "/getPrice";
+		String URL = priceUrl;
 		Map<String, String> map = new HashMap<>();
 		map.put("tripPricerApiKey", tripPricerApiKey);
 		map.put("userId", user.getUserId().toString());
@@ -101,7 +111,7 @@ public class TourGuideService {
 	}
 
 	public VisitedLocation trackUserLocation(User user) {
-		String URL = "http://localhost:" + 8081 + "/getUserLocation";
+		String URL = userLocationUrl;
 		HttpEntity<UUID> entity = new HttpEntity<UUID>(user.getUserId(), null);
 		ResponseEntity<VisitedLocation> response = restTemplate.exchange(URL, HttpMethod.POST, entity, VisitedLocation.class);
 		VisitedLocation visitedLocation = response.getBody();

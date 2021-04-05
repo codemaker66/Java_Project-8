@@ -26,6 +26,16 @@ public class RewardsService {
 	private int proximityBuffer = defaultProximityBuffer;
 	private int attractionProximityRange = 200;
 	private RestTemplate restTemplate = new RestTemplate();
+	private String attractionRewardPointsUrl = "http://reward-central-server:8082/getAttractionRewardPoints";
+	private String attractionsUrl = "http://gps-util-server:8081/getAttractions";
+	
+	public void setAttractionRewardPointsUrl(String attractionRewardPointsUrl) {
+		this.attractionRewardPointsUrl = attractionRewardPointsUrl;
+	}
+	
+	public void setAttractionsUrl(String attractionsUrl) {
+		this.attractionsUrl = attractionsUrl;
+	}
 
 	public void setProximityBuffer(int proximityBuffer) {
 		this.proximityBuffer = proximityBuffer;
@@ -60,7 +70,7 @@ public class RewardsService {
 	}
 
 	public int getRewardPoints(Attraction attraction, User user) {
-		String URL = "http://localhost:" + 8082 + "/getAttractionRewardPoints";
+		String URL = attractionRewardPointsUrl;
 		Map<String, UUID> map = new HashMap<>();
 		map.put("attractionId", attraction.attractionId);
 		map.put("userId", user.getUserId());
@@ -83,7 +93,7 @@ public class RewardsService {
 	}
 
 	public List<Attraction> getAttractions() {
-		String URL = "http://localhost:" + 8081 + "/getAttractions";
+		String URL = attractionsUrl;
 		ResponseEntity<List<Attraction>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Attraction>>(){});
 		return response.getBody();
 	}

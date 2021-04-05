@@ -19,8 +19,11 @@ public class TestRewardsService {
 	@Test
 	public void userGetRewards() {
 		RewardsService rewardsService = new RewardsService();
+		rewardsService.setAttractionRewardPointsUrl("http://localhost:8082/getAttractionRewardPoints");
+		rewardsService.setAttractionsUrl("http://localhost:8081/getAttractions");
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		Attraction attraction = rewardsService.getAttractions().get(0);
@@ -37,6 +40,7 @@ public class TestRewardsService {
 	@Test
 	public void isWithinAttractionProximity() {
 		RewardsService rewardsService = new RewardsService();
+		rewardsService.setAttractionsUrl("http://localhost:8081/getAttractions");
 		Attraction attraction = rewardsService.getAttractions().get(0);
 		assertTrue(rewardsService.isWithinAttractionProximity(attraction, attraction));
 	}
@@ -45,6 +49,8 @@ public class TestRewardsService {
 	public void nearAllAttractions() {
 		RewardsService rewardsService = new RewardsService();
 		rewardsService.setProximityBuffer(Integer.MAX_VALUE);
+		rewardsService.setAttractionRewardPointsUrl("http://localhost:8082/getAttractionRewardPoints");
+		rewardsService.setAttractionsUrl("http://localhost:8081/getAttractions");
 		InternalTestHelper.setInternalUserNumber(1);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
 

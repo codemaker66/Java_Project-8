@@ -29,6 +29,7 @@ public class TestTourGuideService {
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
@@ -83,6 +84,7 @@ public class TestTourGuideService {
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
@@ -95,8 +97,11 @@ public class TestTourGuideService {
 	@Test
 	public void getNearbyAttractions() {
 		RewardsService rewardsService = new RewardsService();
+		rewardsService.setAttractionRewardPointsUrl("http://localhost:8082/getAttractionRewardPoints");
+		rewardsService.setAttractionsUrl("http://localhost:8081/getAttractions");
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		VisitedLocation visitedLocation = tourGuideService.trackUserLocation(user);
@@ -113,6 +118,7 @@ public class TestTourGuideService {
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setPriceUrl("http://localhost:8083/getPrice");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 
@@ -128,6 +134,7 @@ public class TestTourGuideService {
 		RewardsService rewardsService = new RewardsService();
 		InternalTestHelper.setInternalUserNumber(0);
 		TourGuideService tourGuideService = new TourGuideService(rewardsService);
+		tourGuideService.setUserLocationUrl("http://localhost:8081/getUserLocation");
 
 		User user = new User(UUID.randomUUID(), "jon", "000", "jon@tourGuide.com");
 		User user2 = new User(UUID.randomUUID(), "jon2", "000", "jon2@tourGuide.com");
