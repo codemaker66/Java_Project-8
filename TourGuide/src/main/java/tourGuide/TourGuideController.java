@@ -29,12 +29,14 @@ public class TourGuideController {
 		return "Greetings from TourGuide!";
 	}
 
+	// This method call the tourGuideService to retrieve the user location.
 	@RequestMapping("/getLocation")
 	public Location getLocation(@RequestParam String userName) {
 		VisitedLocation visitedLocation = tourGuideService.getUserLocation(tourGuideService.getUser(userName));
 		return visitedLocation.location;
 	}
 
+	// This method call the tourGuideService to retrieve nearby attractions.
 	@RequestMapping("/getNearbyAttractions")
 	public List<Output> getNearbyAttractions(@RequestParam String userName) {
 		User user = tourGuideService.getUser(userName);
@@ -42,21 +44,25 @@ public class TourGuideController {
 		return tourGuideService.getNearByAttractions(visitedLocation, user);
 	}
 
+	// This method call the tourGuideService to retrieve the rewards.
 	@RequestMapping("/getRewards")
 	public List<UserReward> getRewards(@RequestParam String userName) {
 		return tourGuideService.getUserRewards(tourGuideService.getUser(userName));
 	}
 
+	// This method call the tourGuideService to retrieve all current locations.
 	@RequestMapping("/getAllCurrentLocations")
 	public Map<String, Location> getAllCurrentLocations() {
 		return tourGuideService.getAllCurrentLocations();
 	}
 
+	// This method call the tourGuideService to retrieve the trip deals.
 	@RequestMapping("/getTripDeals")
 	public List<Provider> getTripDeals(@RequestParam String userName) {
 		return tourGuideService.getTripDeals(tourGuideService.getUser(userName));
 	}
 
+	// This method call the tourGuideService to save the user preferences.
 	@PostMapping(value = "/editPreferences")
 	public String editPreferences(@RequestParam String userName, @RequestBody Preferences preferences) {
 		tourGuideService.editPreferences(tourGuideService.getUser(userName), preferences);

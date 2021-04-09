@@ -93,6 +93,7 @@ public class TourGuideService {
 		}
 	}
 
+	// This method retrieve the trip deals.
 	public List<Provider> getTripDeals(User user) {
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
 		String URL = priceUrl;
@@ -110,6 +111,7 @@ public class TourGuideService {
 		return providers;
 	}
 
+	// This method track the user location.
 	public VisitedLocation trackUserLocation(User user) {
 		String URL = userLocationUrl;
 		HttpEntity<UUID> entity = new HttpEntity<UUID>(user.getUserId(), null);
@@ -119,6 +121,7 @@ public class TourGuideService {
 		return visitedLocation;
 	}
 
+	// This method retrieve the nearby attractions.
 	public List<Output> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 		List<Output> attractionList = new ArrayList<>();
 		List<Output> nearByAttractions = new ArrayList<>();
@@ -143,6 +146,7 @@ public class TourGuideService {
 		return nearByAttractions;
 	}
 
+	// This method retrieve all current locations.
 	public Map<String, Location> getAllCurrentLocations() {
 		Map<String, Location> map = new HashMap<>();
 		List<User> users = getAllUsers();
@@ -154,6 +158,7 @@ public class TourGuideService {
 		return map;
 	}
 
+	// This method save the new preferences of the user.
 	public void editPreferences(User user, Preferences preferences) {
 		UserPreferences userPreferences = new UserPreferences();
 		userPreferences.setAttractionProximity(preferences.getAttractionProximity());

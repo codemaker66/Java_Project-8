@@ -45,6 +45,7 @@ public class RewardsService {
 		proximityBuffer = defaultProximityBuffer;
 	}
 
+	// This method calculate the user rewards.
 	public void calculateRewards(User user) {
 
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
@@ -69,6 +70,7 @@ public class RewardsService {
 		return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
 	}
 
+	// This method retrieve the reward points.
 	public int getRewardPoints(Attraction attraction, User user) {
 		String URL = attractionRewardPointsUrl;
 		Map<String, UUID> map = new HashMap<>();
@@ -79,6 +81,7 @@ public class RewardsService {
 		return response.getBody();
 	}
 
+	// This method calculate the distance between two locations.
 	public double getDistance(Location loc1, Location loc2) {
 		double lat1 = Math.toRadians(loc1.latitude);
 		double lon1 = Math.toRadians(loc1.longitude);
@@ -92,6 +95,7 @@ public class RewardsService {
 		return statuteMiles;
 	}
 
+	// This method retrieve the attractions.
 	public List<Attraction> getAttractions() {
 		String URL = attractionsUrl;
 		ResponseEntity<List<Attraction>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Attraction>>(){});
