@@ -1,4 +1,4 @@
-package tourGuide.tracker;
+package tourguide.tracker;
 
 import java.util.List;
 import java.util.concurrent.ExecutorService;
@@ -8,8 +8,8 @@ import org.apache.commons.lang3.time.StopWatch;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
-import tourGuide.model.User;
-import tourGuide.service.TourGuideService;
+import tourguide.model.User;
+import tourguide.service.TourGuideService;
 
 public class Tracker extends Thread {
 	private Logger logger = LoggerFactory.getLogger(Tracker.class);

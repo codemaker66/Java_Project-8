@@ -1,4 +1,4 @@
-package tourGuide.model;
+package tourguide.model;
 
 import javax.money.CurrencyUnit;
 import javax.money.Monetary;

@@ -1,4 +1,4 @@
-package tourGuide.model;
+package tourguide.model;
 
 public class Location {
 

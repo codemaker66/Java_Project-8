@@ -1,4 +1,4 @@
-package tourGuide.service;
+package tourguide.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import tourGuide.model.Attraction;
-import tourGuide.model.Location;
-import tourGuide.model.User;
-import tourGuide.model.UserReward;
-import tourGuide.model.VisitedLocation;
+import tourguide.model.Attraction;
+import tourguide.model.Location;
+import tourguide.model.User;
+import tourguide.model.UserReward;
+import tourguide.model.VisitedLocation;
 
 @Service
 public class RewardsService {
@@ -44,8 +44,12 @@ public class RewardsService {
 	public void setDefaultProximityBuffer() {
 		proximityBuffer = defaultProximityBuffer;
 	}
-
-	// This method calculate the user rewards.
+	
+	/**
+	 * This method calculate the user rewards.
+	 * 
+	 * @param user is an object of type User.
+	 */
 	public void calculateRewards(User user) {
 
 		List<VisitedLocation> userLocations = user.getVisitedLocations();
@@ -69,8 +73,14 @@ public class RewardsService {
 	private boolean nearAttraction(VisitedLocation visitedLocation, Attraction attraction) {
 		return getDistance(attraction, visitedLocation.location) > proximityBuffer ? false : true;
 	}
-
-	// This method retrieve the reward points.
+	
+	/**
+	 * This method retrieve the reward points.
+	 * 
+	 * @param attraction is an object of type Attraction.
+	 * @param user is an object of type User.
+	 * @return an integer that represent the value of the reward points.
+	 */
 	public int getRewardPoints(Attraction attraction, User user) {
 		String URL = attractionRewardPointsUrl;
 		Map<String, UUID> map = new HashMap<>();
@@ -80,8 +90,14 @@ public class RewardsService {
 		ResponseEntity<Integer> response = restTemplate.exchange(URL, HttpMethod.POST, entity, Integer.class);
 		return response.getBody();
 	}
-
-	// This method calculate the distance between two locations.
+	
+	/**
+	 * This method calculate the distance between two locations.
+	 * 
+	 * @param loc1 is an object of type Location.
+	 * @param loc2 is an object of type Location.
+	 * @return a double that represent the distance between the two locations.
+	 */
 	public double getDistance(Location loc1, Location loc2) {
 		double lat1 = Math.toRadians(loc1.latitude);
 		double lon1 = Math.toRadians(loc1.longitude);
@@ -94,8 +110,12 @@ public class RewardsService {
 		double statuteMiles = STATUTE_MILES_PER_NAUTICAL_MILE * nauticalMiles;
 		return statuteMiles;
 	}
-
-	// This method retrieve the attractions.
+	
+	/**
+	 * This method retrieve the attractions.
+	 * 
+	 * @return a list of objects of type Attraction.
+	 */
 	public List<Attraction> getAttractions() {
 		String URL = attractionsUrl;
 		ResponseEntity<List<Attraction>> response = restTemplate.exchange(URL, HttpMethod.GET, null, new ParameterizedTypeReference<List<Attraction>>(){});

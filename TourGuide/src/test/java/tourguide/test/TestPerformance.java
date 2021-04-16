@@ -1,4 +1,4 @@
-package tourGuide;
+package tourguide.test;
 
 import static org.junit.Assert.assertTrue;
 import java.util.ArrayList;
@@ -11,12 +11,13 @@ import java.util.concurrent.Executors;
 import java.util.concurrent.TimeUnit;
 import org.apache.commons.lang3.time.StopWatch;
 import org.junit.Test;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.model.Attraction;
-import tourGuide.model.User;
-import tourGuide.model.VisitedLocation;
-import tourGuide.service.RewardsService;
-import tourGuide.service.TourGuideService;
+
+import tourguide.helper.InternalTestHelper;
+import tourguide.model.Attraction;
+import tourguide.model.User;
+import tourguide.model.VisitedLocation;
+import tourguide.service.RewardsService;
+import tourguide.service.TourGuideService;
 
 public class TestPerformance {
 

@@ -1,4 +1,4 @@
-package tourGuide.service;
+package tourguide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -26,17 +26,18 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.model.Attraction;
-import tourGuide.model.Location;
-import tourGuide.model.Output;
-import tourGuide.model.Preferences;
-import tourGuide.model.Provider;
-import tourGuide.model.User;
-import tourGuide.model.UserPreferences;
-import tourGuide.model.UserReward;
-import tourGuide.model.VisitedLocation;
-import tourGuide.tracker.Tracker;
+
+import tourguide.helper.InternalTestHelper;
+import tourguide.model.Attraction;
+import tourguide.model.Location;
+import tourguide.model.Output;
+import tourguide.model.Preferences;
+import tourguide.model.Provider;
+import tourguide.model.User;
+import tourguide.model.UserPreferences;
+import tourguide.model.UserReward;
+import tourguide.model.VisitedLocation;
+import tourguide.tracker.Tracker;
 
 @Service
 public class TourGuideService {
@@ -92,8 +93,13 @@ public class TourGuideService {
 			internalUserMap.put(user.getUserName(), user);
 		}
 	}
-
-	// This method retrieve the trip deals.
+	
+	/**
+	 * This method retrieve the trip deals.
+	 * 
+	 * @param user is an object of type User.
+	 * @return a list of objects of type Provider.
+	 */
 	public List<Provider> getTripDeals(User user) {
 		int cumulatativeRewardPoints = user.getUserRewards().stream().mapToInt(i -> i.getRewardPoints()).sum();
 		String URL = priceUrl;
@@ -110,8 +116,13 @@ public class TourGuideService {
 		user.setTripDeals(providers);
 		return providers;
 	}
-
-	// This method track the user location.
+	
+	/**
+	 * This method track the user location.
+	 * 
+	 * @param user is an object of type User.
+	 * @return an object of type VisitedLocation.
+	 */
 	public VisitedLocation trackUserLocation(User user) {
 		String URL = userLocationUrl;
 		HttpEntity<UUID> entity = new HttpEntity<UUID>(user.getUserId(), null);
@@ -120,8 +131,14 @@ public class TourGuideService {
 		user.addToVisitedLocations(visitedLocation);
 		return visitedLocation;
 	}
-
-	// This method retrieve the nearby attractions.
+	
+	/**
+	 * This method retrieve the nearby attractions.
+	 * 
+	 * @param visitedLocation is an object of type VisitedLocation.
+	 * @param user is an object of type User.
+	 * @return a list of objects of type Output.
+	 */
 	public List<Output> getNearByAttractions(VisitedLocation visitedLocation, User user) {
 		List<Output> attractionList = new ArrayList<>();
 		List<Output> nearByAttractions = new ArrayList<>();
@@ -145,8 +162,12 @@ public class TourGuideService {
 
 		return nearByAttractions;
 	}
-
-	// This method retrieve all current locations.
+	
+	/**
+	 * This method retrieve all current locations.
+	 * 
+	 * @return a map.
+	 */
 	public Map<String, Location> getAllCurrentLocations() {
 		Map<String, Location> map = new HashMap<>();
 		List<User> users = getAllUsers();
@@ -157,8 +178,13 @@ public class TourGuideService {
 
 		return map;
 	}
-
-	// This method save the new preferences of the user.
+	
+	/**
+	 * This method save the new preferences of the user.
+	 * 
+	 * @param user is an object of type User.
+	 * @param preferences is an object of type Preferences.
+	 */
 	public void editPreferences(User user, Preferences preferences) {
 		UserPreferences userPreferences = new UserPreferences();
 		userPreferences.setAttractionProximity(preferences.getAttractionProximity());

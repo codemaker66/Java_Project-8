@@ -1,4 +1,4 @@
-package tourGuide;
+package tourguide.test;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
@@ -12,15 +12,16 @@ import javax.money.Monetary;
 
 import org.javamoney.moneta.Money;
 import org.junit.Test;
-import tourGuide.helper.InternalTestHelper;
-import tourGuide.model.Location;
-import tourGuide.model.Output;
-import tourGuide.model.Provider;
-import tourGuide.model.User;
-import tourGuide.model.UserPreferences;
-import tourGuide.model.VisitedLocation;
-import tourGuide.service.RewardsService;
-import tourGuide.service.TourGuideService;
+
+import tourguide.helper.InternalTestHelper;
+import tourguide.model.Location;
+import tourguide.model.Output;
+import tourguide.model.Provider;
+import tourguide.model.User;
+import tourguide.model.UserPreferences;
+import tourguide.model.VisitedLocation;
+import tourguide.service.RewardsService;
+import tourguide.service.TourGuideService;
 
 public class TestTourGuideService {
 
