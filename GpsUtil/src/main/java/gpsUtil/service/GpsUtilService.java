@@ -1,4 +1,4 @@
-package gpsutil.service;
+package gpsUtil.service;
 
 import java.util.List;
 import java.util.Locale;

@@ -1,4 +1,4 @@
-package tourguide.test;
+package tourGuide;
 
 import static org.junit.Assert.*;
 
@@ -7,13 +7,13 @@ import java.util.List;
 import java.util.UUID;
 import org.junit.Test;
 
-import tourguide.helper.InternalTestHelper;
-import tourguide.model.Attraction;
-import tourguide.model.User;
-import tourguide.model.UserReward;
-import tourguide.model.VisitedLocation;
-import tourguide.service.RewardsService;
-import tourguide.service.TourGuideService;
+import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Attraction;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
+import tourGuide.service.RewardsService;
+import tourGuide.service.TourGuideService;
 
 public class TestRewardsService {
 

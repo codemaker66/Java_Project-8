@@ -1,4 +1,4 @@
-package rewardcentral.service;
+package rewardCentral.service;
 
 import java.util.UUID;
 import org.springframework.stereotype.Service;

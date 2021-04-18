@@ -1,4 +1,4 @@
-package tourguide;
+package tourGuide;
 
 import java.util.List;
 import java.util.Map;
@@ -9,14 +9,14 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
-import tourguide.model.Location;
-import tourguide.model.Output;
-import tourguide.model.Preferences;
-import tourguide.model.Provider;
-import tourguide.model.User;
-import tourguide.model.UserReward;
-import tourguide.model.VisitedLocation;
-import tourguide.service.TourGuideService;
+import tourGuide.model.Location;
+import tourGuide.model.Output;
+import tourGuide.model.Preferences;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
+import tourGuide.service.TourGuideService;
 
 @RestController
 public class TourGuideController {

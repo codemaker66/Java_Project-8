@@ -1,4 +1,4 @@
-package trippricer.service;
+package tripPricer.service;
 
 import java.util.List;
 import java.util.Map;

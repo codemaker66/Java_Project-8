@@ -1,4 +1,4 @@
-package tourguide.model;
+package tourGuide.model;
 
 import java.util.ArrayList;
 import java.util.Date;

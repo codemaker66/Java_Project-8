@@ -1,4 +1,4 @@
-package tourguide.service;
+package tourGuide.service;
 
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
@@ -27,17 +27,17 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import tourguide.helper.InternalTestHelper;
-import tourguide.model.Attraction;
-import tourguide.model.Location;
-import tourguide.model.Output;
-import tourguide.model.Preferences;
-import tourguide.model.Provider;
-import tourguide.model.User;
-import tourguide.model.UserPreferences;
-import tourguide.model.UserReward;
-import tourguide.model.VisitedLocation;
-import tourguide.tracker.Tracker;
+import tourGuide.helper.InternalTestHelper;
+import tourGuide.model.Attraction;
+import tourGuide.model.Location;
+import tourGuide.model.Output;
+import tourGuide.model.Preferences;
+import tourGuide.model.Provider;
+import tourGuide.model.User;
+import tourGuide.model.UserPreferences;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
+import tourGuide.tracker.Tracker;
 
 @Service
 public class TourGuideService {

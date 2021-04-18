@@ -1,4 +1,4 @@
-package tourguide.service;
+package tourGuide.service;
 
 import java.util.HashMap;
 import java.util.List;
@@ -11,11 +11,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
 
-import tourguide.model.Attraction;
-import tourguide.model.Location;
-import tourguide.model.User;
-import tourguide.model.UserReward;
-import tourguide.model.VisitedLocation;
+import tourGuide.model.Attraction;
+import tourGuide.model.Location;
+import tourGuide.model.User;
+import tourGuide.model.UserReward;
+import tourGuide.model.VisitedLocation;
 
 @Service
 public class RewardsService {

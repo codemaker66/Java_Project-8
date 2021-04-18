@@ -1,4 +1,4 @@
-package rewardcentral;
+package rewardCentral;
 
 import java.util.Map;
 import java.util.UUID;
@@ -6,7 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import rewardcentral.service.RewardCentralService;
+import rewardCentral.service.RewardCentralService;
 
 @RestController
 public class RewardCentralController {

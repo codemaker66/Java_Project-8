@@ -1,4 +1,4 @@
-package gpsutil;
+package gpsUtil;
 
 import java.util.List;
 import java.util.UUID;
@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import gpsUtil.location.Attraction;
 import gpsUtil.location.VisitedLocation;
-import gpsutil.service.GpsUtilService;
+import gpsUtil.service.GpsUtilService;
 
 @RestController
 public class GpsUtilController {

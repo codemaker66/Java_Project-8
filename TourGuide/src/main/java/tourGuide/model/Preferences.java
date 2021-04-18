@@ -1,4 +1,4 @@
-package tourguide.model;
+package tourGuide.model;
 
 public class Preferences {
 
